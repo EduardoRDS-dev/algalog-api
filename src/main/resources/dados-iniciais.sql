@@ -1,0 +1,2 @@
+insert into tb_client(id, name, email, phone) values(1, "Maria Sousa", "Maria@email.com", "(11)987654321");
+insert into tb_client(id, name, email, phone) values(2, "Joana Cardoso", "Joana@email.com", "(62)123456789");

@@ -1,9 +1,10 @@
-package com.algaworks.algalog.domain;
+package com.algaworks.algalog.domain.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +14,7 @@ import java.util.Objects;
 @Setter
 
 @Entity
+@Table(name = "tb_client")
 public class Client {
 
     @Id
