@@ -26,13 +26,11 @@ public class Client {
 
     public Client() {
     }
-
     public Client(String name, String email, String phone) {
         this.name = name;
         this.email = email;
         this.phone = phone;
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
