@@ -3,7 +3,6 @@ package com.algaworks.algalog.api.controller;
 import com.algaworks.algalog.domain.dto.ClientDTO;
 import com.algaworks.algalog.domain.model.Client;
 import com.algaworks.algalog.domain.service.ClientService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +13,11 @@ import java.util.List;
 @RequestMapping(value = "/clients")
 public class ClientController {
 
-    @Autowired
-    private ClientService service;
+    private final ClientService service;
+
+    public ClientController(ClientService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public ResponseEntity<List<ClientDTO>> findAll() {
