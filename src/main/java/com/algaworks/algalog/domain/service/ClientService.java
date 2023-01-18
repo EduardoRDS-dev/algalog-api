@@ -1,9 +1,11 @@
 package com.algaworks.algalog.domain.service;
 
+import com.algaworks.algalog.api.exceptions.BusinessException;
 import com.algaworks.algalog.domain.dto.ClientDTO;
 import com.algaworks.algalog.domain.model.Client;
 import com.algaworks.algalog.domain.repository.ClientRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,24 +23,18 @@ public class ClientService {
         return repository.findById(id).map(ClientDTO::new);
     }
 
-    public void insert(ClientDTO clientDTO) {
-        repository.save(new Client(clientDTO.getName(), clientDTO.getEmail(), clientDTO.getPhone()));
-    }
+    @Transactional
+    public Optional<ClientDTO> save(ClientDTO clientDTO) {
 
-    public Optional<ClientDTO> update(Long id, ClientDTO clientDTO) {
-
-        Optional<Client> optional = repository.findById(id);
-        if (optional.isPresent()) {
-            Client client = optional.get();
-            client.setName(clientDTO.getName());
-            client.setEmail(clientDTO.getEmail());
-            client.setPhone(clientDTO.getPhone());
-            repository.save(client);
-            return Optional.of(new ClientDTO(client));
+        Client newClient = new Client(clientDTO.getName(), clientDTO.getEmail(), clientDTO.getPhone());
+        boolean match = repository.findByEmail(clientDTO.getEmail()).stream().anyMatch(client -> !client.equals(newClient));
+        if (match) {
+            throw new BusinessException("E-mail em uso!");
         }
-        return Optional.empty();
+        return Optional.of(new ClientDTO(repository.save(newClient)));
     }
 
+    @Transactional
     public boolean delete(Long id) {
         boolean exist = repository.existsById(id);
         if (exist) {
