@@ -26,6 +26,7 @@ public class Client {
 
     public Client() {
     }
+
     public Client(String name, String email, String phone) {
         this.name = name;
         this.email = email;
@@ -37,11 +38,11 @@ public class Client {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Client client = (Client) o;
-        return Objects.equals(id, client.id);
+        return Objects.equals(id, client.id) && Objects.equals(email, client.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, email);
     }
 }
