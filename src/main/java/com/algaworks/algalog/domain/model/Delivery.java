@@ -18,7 +18,7 @@ public class Delivery {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne()
+    @ManyToOne(optional = false)
     private Client client;
 
     @Embedded
@@ -30,9 +30,6 @@ public class Delivery {
     private Instant requestDate;
     private Instant deliveryDate;
 
-    public Delivery(){
-
-    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -42,11 +42,11 @@ public class ClientDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ClientDTO clientDTO = (ClientDTO) o;
-        return Objects.equals(id, clientDTO.id) && Objects.equals(email, clientDTO.email);
+        return Objects.equals(id, clientDTO.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email);
+        return Objects.hash(id);
     }
 }
