@@ -1,9 +1,11 @@
 package com.algaworks.algalog.domain.dto;
 
 import com.algaworks.algalog.domain.model.Client;
+import com.algaworks.algalog.domain.validation_groups.ValidationGroups;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,6 +18,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ClientDTO {
 
+    @NotNull(groups = ValidationGroups.ClientID.class)
     private Long id;
 
     @Size(max = 30)
@@ -29,6 +32,9 @@ public class ClientDTO {
     @Size(min = 9, max = 11)
     @NotBlank
     private String phone;
+
+    public ClientDTO() {
+    }
 
     public ClientDTO(Client client) {
         this.id = client.getId();

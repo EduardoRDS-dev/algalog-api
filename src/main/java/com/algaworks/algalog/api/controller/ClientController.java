@@ -26,7 +26,7 @@ public class ClientController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<ClientDTO> findById(@PathVariable() Long id) {
-        return service.findById(id).map((client) -> ResponseEntity.ok(new ClientDTO(client))).orElse(ResponseEntity.badRequest().build());
+        return service.findById(id).map((client) -> ResponseEntity.ok(new ClientDTO(client))).orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping

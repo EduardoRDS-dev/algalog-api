@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class Field {
-    private String fieldName;
+    private String field;
     private String message;
 }

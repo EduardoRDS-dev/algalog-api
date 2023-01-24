@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZoneOffset;
 import java.util.Optional;
-
 @Service
 public class DeliveryRequest {
 
@@ -41,5 +40,4 @@ public class DeliveryRequest {
         );
         return new DeliveryDTO(new ClientDTO(clientChecked), deliveryDTO.getRemitteeDTO());
     }
-
 }

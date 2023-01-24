@@ -1,8 +1,12 @@
 package com.algaworks.algalog.domain.dto;
 
 import com.algaworks.algalog.domain.model.DeliveryStatus;
+import com.algaworks.algalog.domain.validation_groups.ValidationGroups;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.groups.ConvertGroup;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,7 +21,14 @@ import java.util.Objects;
 public class DeliveryDTO {
 
     private Long id;
+
+    @Valid
+    @ConvertGroup(to = ValidationGroups.ClientID.class)
+    @NotNull
     private ClientDTO clientDTO;
+
+    @Valid
+    @NotNull
     private RemitteeDTO remitteeDTO;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
