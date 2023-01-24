@@ -19,8 +19,8 @@ public class ClientService {
         this.repository = repository;
     }
 
-    public Optional<ClientDTO> findById(Long id) {
-        return repository.findById(id).map(ClientDTO::new);
+    public Optional<Client> findById(Long id) {
+        return repository.findById(id);
     }
 
     @Transactional
@@ -29,7 +29,7 @@ public class ClientService {
         Client newClient = new Client(clientDTO.getName(), clientDTO.getEmail(), clientDTO.getPhone());
         boolean match = repository.findByEmail(clientDTO.getEmail()).stream().anyMatch(client -> !client.equals(newClient));
         if (match) {
-            throw new BusinessException("E-mail em uso!");
+            throw new BusinessException("e-mail in use!");
         }
         return Optional.of(new ClientDTO(repository.save(newClient)));
     }

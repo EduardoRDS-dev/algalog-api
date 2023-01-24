@@ -1,6 +1,7 @@
 package com.algaworks.algalog.domain.dto;
 
 import com.algaworks.algalog.domain.model.Client;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -11,6 +12,8 @@ import java.util.Objects;
 
 @Getter
 @Setter
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ClientDTO {
 
     private Long id;
@@ -26,9 +29,6 @@ public class ClientDTO {
     @Size(min = 9, max = 11)
     @NotBlank
     private String phone;
-
-    public ClientDTO() {
-    }
 
     public ClientDTO(Client client) {
         this.id = client.getId();

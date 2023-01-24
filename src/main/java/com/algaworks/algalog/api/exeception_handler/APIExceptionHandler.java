@@ -1,6 +1,7 @@
 package com.algaworks.algalog.api.exeception_handler;
 
 import com.algaworks.algalog.api.exceptions.BusinessException;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -21,12 +22,12 @@ import java.util.List;
 public class APIExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
-    protected ResponseEntity<Object> handleMissingPathVariable(MissingPathVariableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+    protected ResponseEntity<Object> handleMissingPathVariable(@NotNull MissingPathVariableException ex, @NotNull HttpHeaders headers, @NotNull HttpStatusCode status, @NotNull WebRequest request) {
         return super.createResponseEntity(null, headers, HttpStatus.BAD_REQUEST, request);
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, @NotNull HttpHeaders headers, HttpStatusCode status, @NotNull WebRequest request) {
         List<Field> fields = new ArrayList<>();
         ex.getBindingResult().getAllErrors().forEach(objectError -> fields.add(new Field(((FieldError) objectError).getField(), objectError.getDefaultMessage())));
         return super.handleExceptionInternal(ex, new BodyForExceptionResponse(LocalDateTime.now(), status.value(), "Um ou mais compos estão inválidos!", fields), headers, HttpStatus.BAD_REQUEST, request);

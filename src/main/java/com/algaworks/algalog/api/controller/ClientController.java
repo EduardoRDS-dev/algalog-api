@@ -3,6 +3,7 @@ package com.algaworks.algalog.api.controller;
 import com.algaworks.algalog.domain.dto.ClientDTO;
 import com.algaworks.algalog.domain.service.ClientService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,12 +26,13 @@ public class ClientController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<ClientDTO> findById(@PathVariable() Long id) {
-        return service.findById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+        return service.findById(id).map((client) -> ResponseEntity.ok(new ClientDTO(client))).orElse(ResponseEntity.badRequest().build());
     }
 
     @PostMapping
-    public ResponseEntity<ClientDTO> save(@Valid @RequestBody ClientDTO clientDTO) {
-        return service.save(clientDTO).map(ResponseEntity::ok).orElse(ResponseEntity.badRequest().build());
+    @ResponseStatus(HttpStatus.CREATED)
+    public ClientDTO save(@Valid @RequestBody ClientDTO clientDTO) {
+        return service.save(clientDTO).orElseThrow();
     }
 
     @PutMapping("/{id}")

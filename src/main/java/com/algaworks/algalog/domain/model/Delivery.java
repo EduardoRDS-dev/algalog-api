@@ -12,6 +12,7 @@ import java.util.Objects;
 @Setter
 
 @Entity
+@Table(name = "tb_delivery")
 public class Delivery {
 
     @Id
@@ -27,8 +28,23 @@ public class Delivery {
     @Enumerated(value = EnumType.STRING)
     private DeliveryStatus status;
     private BigDecimal tax;
+
+    @Column(name = "request_date")
     private Instant requestDate;
+
+    @Column(name = "delivery_date")
     private Instant deliveryDate;
+
+    public Delivery() {
+    }
+
+    public Delivery(Client client, Remittee remittee, DeliveryStatus status, BigDecimal tax, Instant requestDate) {
+        this.client = client;
+        this.remittee = remittee;
+        this.status = status;
+        this.tax = tax;
+        this.requestDate = requestDate;
+    }
 
     @Override
     public boolean equals(Object o) {
