@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 
 @Getter
@@ -30,15 +30,15 @@ public class Delivery {
     private BigDecimal tax;
 
     @Column(name = "request_date")
-    private Instant requestDate;
+    private OffsetDateTime requestDate;
 
     @Column(name = "delivery_date")
-    private Instant deliveryDate;
+    private OffsetDateTime deliveryDate;
 
     public Delivery() {
     }
 
-    public Delivery(Client client, Remittee remittee, DeliveryStatus status, BigDecimal tax, Instant requestDate) {
+    public Delivery(Client client, Remittee remittee, DeliveryStatus status, BigDecimal tax, OffsetDateTime requestDate) {
         this.client = client;
         this.remittee = remittee;
         this.status = status;

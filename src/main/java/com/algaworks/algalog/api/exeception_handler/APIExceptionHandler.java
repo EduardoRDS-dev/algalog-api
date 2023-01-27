@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,15 +25,17 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMissingPathVariable(@NotNull MissingPathVariableException ex, @NotNull HttpHeaders headers, @NotNull HttpStatusCode status, @NotNull WebRequest request) {
         return super.createResponseEntity(null, headers, HttpStatus.BAD_REQUEST, request);
     }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, @NotNull HttpHeaders headers, HttpStatusCode status, @NotNull WebRequest request) {
         List<Field> fields = new ArrayList<>();
         ex.getBindingResult().getAllErrors().forEach(objectError -> fields.add(new Field(((FieldError) objectError).getField(), objectError.getDefaultMessage())));
-        return super.handleExceptionInternal(ex, new BodyForExceptionResponse(LocalDateTime.now(), status.value(), "Um ou mais compos estão inválidos!", fields), headers, HttpStatus.BAD_REQUEST, request);
+        return super.handleExceptionInternal(ex, new BodyForExceptionResponse(OffsetDateTime.now(), status.value(), "Um ou mais compos estão inválidos!", fields), headers, HttpStatus.BAD_REQUEST, request);
     }
+
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<Object> handleBusinessException(BusinessException ex, WebRequest request) {
-        BodyForExceptionResponse responseBody = new BodyForExceptionResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), ex.getMessage(), null);
+        BodyForExceptionResponse responseBody = new BodyForExceptionResponse(OffsetDateTime.now(), HttpStatus.BAD_REQUEST.value(), ex.getMessage(), null);
         return super.createResponseEntity(responseBody, HttpHeaders.EMPTY, HttpStatus.BAD_REQUEST, request);
     }
 }

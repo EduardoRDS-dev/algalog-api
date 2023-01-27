@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 
 @Getter
@@ -38,17 +38,17 @@ public class DeliveryDTO {
     private BigDecimal tax;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private LocalDateTime requestDate;
+    private OffsetDateTime requestDate;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private LocalDateTime deliveryRequest;
+    private OffsetDateTime deliveryRequest;
 
     public DeliveryDTO(ClientDTO clientDTO, RemitteeDTO remitteeDTO) {
         this.clientDTO = clientDTO;
         this.remitteeDTO = remitteeDTO;
         this.status = DeliveryStatus.PENDING;
         this.tax = new BigDecimal(100);
-        this.requestDate = LocalDateTime.now();
+        this.requestDate = OffsetDateTime.now();
     }
 
     @Override

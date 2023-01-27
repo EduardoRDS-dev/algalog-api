@@ -10,8 +10,8 @@ import com.algaworks.algalog.domain.repository.DeliveryRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.ZoneOffset;
 import java.util.Optional;
+
 @Service
 public class DeliveryRequest {
 
@@ -35,7 +35,7 @@ public class DeliveryRequest {
                         new Remittee(deliveryDTO.getRemitteeDTO()),
                         deliveryDTO.getStatus(),
                         deliveryDTO.getTax(),
-                        deliveryDTO.getRequestDate().toInstant(ZoneOffset.UTC)
+                        deliveryDTO.getRequestDate()
                 )
         );
         return new DeliveryDTO(new ClientDTO(clientChecked), deliveryDTO.getRemitteeDTO());
