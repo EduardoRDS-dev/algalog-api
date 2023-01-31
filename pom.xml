@@ -14,7 +14,8 @@
     <name>algalog-api</name>
     <description>Demo project for Spring Boot</description>
     <properties>
-        <java.version>17</java.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maevn.compiler.target>17</maevn.compiler.target>
     </properties>
     <dependencies>
         <dependency>

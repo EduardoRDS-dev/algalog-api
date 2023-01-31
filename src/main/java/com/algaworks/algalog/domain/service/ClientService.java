@@ -1,49 +1,68 @@
 package com.algaworks.algalog.domain.service;
 
 import com.algaworks.algalog.api.exceptions.BusinessException;
-import com.algaworks.algalog.domain.dto.ClientDTO;
-import com.algaworks.algalog.domain.model.Client;
+import com.algaworks.algalog.api.mapper.ClientMapper;
+import com.algaworks.algalog.api.model.ClientModel;
+import com.algaworks.algalog.api.model.input.ClientInput;
+import com.algaworks.algalog.domain.entity.Client;
 import com.algaworks.algalog.domain.repository.ClientRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class ClientService {
 
-    private final ClientRepository repository;
+    private final ClientRepository clientRepository;
+    private final ClientMapper clientMapper;
 
-    public ClientService(ClientRepository repository) {
-        this.repository = repository;
+
+    public Optional<ClientModel> findById(Long id) {
+        return clientRepository.findById(id).map(clientMapper::toClientModel);
     }
 
-    public Optional<Client> findById(Long id) {
-        return repository.findById(id);
+    public Optional<Client> findByEmail(ClientInput clientInput) {
+        return clientRepository.findByEmail(clientInput.getEmail());
     }
 
-    @Transactional
-    public Optional<ClientDTO> save(ClientDTO clientDTO) {
+    public List<ClientModel> findAll() {
+        return clientMapper.toClientModelCollection(clientRepository.findAll());
+    }
 
-        Client newClient = new Client(clientDTO.getName(), clientDTO.getEmail(), clientDTO.getPhone());
-        boolean match = repository.findByEmail(clientDTO.getEmail()).stream().anyMatch(client -> !client.equals(newClient));
-        if (match) {
+    public ClientModel save(ClientInput clientInput) {
+
+        findByEmail(clientInput).ifPresent(client -> {
             throw new BusinessException("e-mail in use!");
-        }
-        return Optional.of(new ClientDTO(repository.save(newClient)));
+        });
+        return clientMapper.toClientModel(clientRepository.save(clientMapper.toClient(clientInput)));
     }
 
-    @Transactional
-    public boolean delete(Long id) {
-        boolean exist = repository.existsById(id);
-        if (exist) {
-            repository.deleteById(id);
-        }
-        return exist;
+    public ClientModel update(Long id, ClientInput clientInput) {
+
+        Client clientFoundById = clientRepository.findById(id).orElseThrow(() -> new BusinessException("client not found!"));
+
+        findByEmail(clientInput).ifPresent(clientFoundByEmail -> {
+            if (!clientFoundByEmail.equals(clientFoundById)) {
+                throw new BusinessException("e-mail in use!");
+            }
+        });
+        return clientMapper.toClientModel(clientRepository.save(fieldUpdate(id, clientInput)));
     }
 
-    public List<ClientDTO> findAll() {
-        return repository.findAll().stream().map(ClientDTO::new).toList();
+    public boolean deleteById(Long id) {
+        if (clientRepository.existsById(id)) {
+            clientRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    private Client fieldUpdate(Long id, ClientInput clientInput) {
+        Client client = clientMapper.toClient(clientInput);
+        client.setId(id);
+        return client;
     }
 }

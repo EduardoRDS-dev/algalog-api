@@ -23,7 +23,7 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMissingPathVariable(@NotNull MissingPathVariableException ex, @NotNull HttpHeaders headers, @NotNull HttpStatusCode status, @NotNull WebRequest request) {
-        return super.createResponseEntity(null, headers, HttpStatus.BAD_REQUEST, request);
+        return super.createResponseEntity(null, headers, HttpStatus.NOT_FOUND, request);
     }
 
     @Override

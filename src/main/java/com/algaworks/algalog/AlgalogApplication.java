@@ -7,6 +7,5 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class AlgalogApplication {
     public static void main(String[] args) {
         SpringApplication.run(AlgalogApplication.class, args);
-
     }
 }

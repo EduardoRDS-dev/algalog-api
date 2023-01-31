@@ -1,8 +1,10 @@
 package com.algaworks.algalog.api.controller;
 
-import com.algaworks.algalog.domain.dto.ClientDTO;
+import com.algaworks.algalog.api.model.ClientModel;
+import com.algaworks.algalog.api.model.input.ClientInput;
 import com.algaworks.algalog.domain.service.ClientService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,40 +12,38 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/clients")
+@AllArgsConstructor
+@RequestMapping("/clients")
 public class ClientController {
 
-    private final ClientService service;
+    private final ClientService clientService;
 
-    public ClientController(ClientService service) {
-        this.service = service;
+    @GetMapping()
+    public ResponseEntity<List<ClientModel>> findAll() {
+        return ResponseEntity.ok(clientService.findAll());
     }
 
-    @GetMapping
-    public ResponseEntity<List<ClientDTO>> findAll() {
-        return ResponseEntity.ok(service.findAll());
+    @GetMapping("/{clientId}")
+    public ResponseEntity<ClientModel> findById(@PathVariable Long clientId) {
+        return clientService.findById(clientId).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<ClientDTO> findById(@PathVariable() Long id) {
-        return service.findById(id).map((client) -> ResponseEntity.ok(new ClientDTO(client))).orElse(ResponseEntity.notFound().build());
-    }
-
-    @PostMapping
+    @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public ClientDTO save(@Valid @RequestBody ClientDTO clientDTO) {
-        return service.save(clientDTO).orElseThrow();
+    public ClientModel save(@Valid @RequestBody ClientInput clientInput) {
+        return clientService.save(clientInput);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ClientDTO> update(@PathVariable Long id, @Valid @RequestBody ClientDTO clientDTO) {
-        return service.save(clientDTO).map(ResponseEntity::ok).orElse(ResponseEntity.badRequest().build());
+    @PutMapping("/{clientId}")
+    public ClientModel update(@PathVariable Long clientId, @Valid @RequestBody ClientInput clientInput) {
+        return clientService.update(clientId, clientInput);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        if (service.delete(id)) {
-            return ResponseEntity.ok().build();
+    @DeleteMapping("/{clientId}")
+    public ResponseEntity<Void> delete(@PathVariable Long clientId) {
+
+        if (clientService.deleteById(clientId)) {
+            return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
     }
