@@ -2,6 +2,7 @@ package com.algaworks.algalog.api.model;
 
 import com.algaworks.algalog.api.model.input.RemitteeInput;
 import com.algaworks.algalog.domain.entity.DeliveryStatus;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +11,7 @@ import java.time.OffsetDateTime;
 
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class DeliveryModel {
 
     private Long id;

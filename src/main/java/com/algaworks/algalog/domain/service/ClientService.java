@@ -1,9 +1,7 @@
 package com.algaworks.algalog.domain.service;
 
 import com.algaworks.algalog.api.exceptions.BusinessException;
-import com.algaworks.algalog.api.mapper.ClientMapper;
-import com.algaworks.algalog.api.model.ClientModel;
-import com.algaworks.algalog.api.model.input.ClientInput;
+import com.algaworks.algalog.api.exceptions.ClientNotFoudException;
 import com.algaworks.algalog.domain.entity.Client;
 import com.algaworks.algalog.domain.repository.ClientRepository;
 import lombok.AllArgsConstructor;
@@ -16,40 +14,36 @@ import java.util.Optional;
 @AllArgsConstructor
 public class ClientService {
 
-    private final ClientRepository clientRepository;
-    private final ClientMapper clientMapper;
+    private ClientRepository clientRepository;
 
-
-    public Optional<ClientModel> findById(Long id) {
-        return clientRepository.findById(id).map(clientMapper::toClientModel);
+    public Optional<Client> findById(Long id) {
+        return clientRepository.findById(id);
     }
 
-    public Optional<Client> findByEmail(ClientInput clientInput) {
-        return clientRepository.findByEmail(clientInput.getEmail());
+    public Optional<Client> findByEmail(Client client) {
+        return clientRepository.findByEmail(client.getEmail());
     }
 
-    public List<ClientModel> findAll() {
-        return clientMapper.toClientModelCollection(clientRepository.findAll());
+    public List<Client> findAll() {
+        return clientRepository.findAll();
     }
 
-    public ClientModel save(ClientInput clientInput) {
-
-        findByEmail(clientInput).ifPresent(client -> {
+    public Client save(Client client) {
+        findByEmail(client).ifPresent(clientExisting -> {
             throw new BusinessException("e-mail in use!");
         });
-        return clientMapper.toClientModel(clientRepository.save(clientMapper.toClient(clientInput)));
+        return clientRepository.save(client);
     }
 
-    public ClientModel update(Long id, ClientInput clientInput) {
+    public Client update(Client client) {
+        Client clientFoundById = clientRepository.findById(client.getId()).orElseThrow(() -> new ClientNotFoudException("client not found!"));
 
-        Client clientFoundById = clientRepository.findById(id).orElseThrow(() -> new BusinessException("client not found!"));
-
-        findByEmail(clientInput).ifPresent(clientFoundByEmail -> {
+        findByEmail(client).ifPresent(clientFoundByEmail -> {
             if (!clientFoundByEmail.equals(clientFoundById)) {
                 throw new BusinessException("e-mail in use!");
             }
         });
-        return clientMapper.toClientModel(clientRepository.save(fieldUpdate(id, clientInput)));
+        return clientRepository.save(client);
     }
 
     public boolean deleteById(Long id) {
@@ -58,11 +52,5 @@ public class ClientService {
             return true;
         }
         return false;
-    }
-
-    private Client fieldUpdate(Long id, ClientInput clientInput) {
-        Client client = clientMapper.toClient(clientInput);
-        client.setId(id);
-        return client;
     }
 }

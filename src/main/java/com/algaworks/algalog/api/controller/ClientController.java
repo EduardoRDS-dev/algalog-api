@@ -1,7 +1,9 @@
 package com.algaworks.algalog.api.controller;
 
+import com.algaworks.algalog.api.mapper.ClientMapper;
 import com.algaworks.algalog.api.model.ClientModel;
 import com.algaworks.algalog.api.model.input.ClientInput;
+import com.algaworks.algalog.domain.entity.Client;
 import com.algaworks.algalog.domain.service.ClientService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -17,34 +19,36 @@ import java.util.List;
 public class ClientController {
 
     private final ClientService clientService;
+    private final ClientMapper clientMapper;
 
     @GetMapping()
     public ResponseEntity<List<ClientModel>> findAll() {
-        return ResponseEntity.ok(clientService.findAll());
+        List<Client> clientList = clientService.findAll();
+        return clientList.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(clientMapper.toClientModelList(clientList));
     }
 
     @GetMapping("/{clientId}")
     public ResponseEntity<ClientModel> findById(@PathVariable Long clientId) {
-        return clientService.findById(clientId).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+        return clientService.findById(clientId)
+                .map(client -> ResponseEntity.ok(clientMapper.toClientModel(client)))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public ClientModel save(@Valid @RequestBody ClientInput clientInput) {
-        return clientService.save(clientInput);
+        return clientMapper.toClientModel(clientService.save(clientMapper.toClient(clientInput)));
     }
 
     @PutMapping("/{clientId}")
     public ClientModel update(@PathVariable Long clientId, @Valid @RequestBody ClientInput clientInput) {
-        return clientService.update(clientId, clientInput);
+        Client client = clientMapper.toClient(clientInput);
+        client.setId(clientId);
+        return clientMapper.toClientModel(clientService.update(client));
     }
 
     @DeleteMapping("/{clientId}")
     public ResponseEntity<Void> delete(@PathVariable Long clientId) {
-
-        if (clientService.deleteById(clientId)) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+        return clientService.deleteById(clientId) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 }
