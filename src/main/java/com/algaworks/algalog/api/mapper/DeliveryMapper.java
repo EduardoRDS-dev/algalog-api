@@ -31,6 +31,7 @@ public class DeliveryMapper {
 
         this.modelMapper = new ModelMapper();
         modelMapper.createTypeMap(Delivery.class, DeliveryModel.class)
+                .addMapping(Delivery::getId, DeliveryModel::setId)
                 .<Client>addMapping(Delivery::getClient, (deliveryModel, srcClient) -> deliveryModel.setClientModel(modelMapper.map(Client.class, ClientModel.class)))
                 .<Remittee>addMapping(Delivery::getRemittee, (deliveryModel, srcRemittee) -> deliveryModel.setRemitteeInput(modelMapper.map(Remittee.class, RemitteeInput.class)))
                 .addMapping(Delivery::getId, DeliveryModel::setId);

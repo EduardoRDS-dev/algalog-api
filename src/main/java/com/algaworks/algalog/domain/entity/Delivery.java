@@ -6,6 +6,8 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -27,6 +29,10 @@ public class Delivery {
 
     @Enumerated(value = EnumType.STRING)
     private DeliveryStatus status;
+
+    @OneToMany(mappedBy = "delivery")
+    private List<Occurrence> occurrences = new ArrayList<>();
+
     private BigDecimal tax;
 
     @Column(name = "request_date")
@@ -36,14 +42,6 @@ public class Delivery {
     private OffsetDateTime deliveryDate;
 
     public Delivery() {
-    }
-
-    public Delivery(Client client, Remittee remittee, DeliveryStatus status, BigDecimal tax, OffsetDateTime requestDate) {
-        this.client = client;
-        this.remittee = remittee;
-        this.status = status;
-        this.tax = tax;
-        this.requestDate = requestDate;
     }
 
     @Override

@@ -4,31 +4,34 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.OffsetDateTime;
 import java.util.Objects;
 
 @Getter
 @Setter
 
 @Entity
-@Table(name = "tb_client")
-public class Client {
+@Table(name = "tb_occurrence")
+public class Occurrence {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String email;
-    private String phone;
 
-    public Client() {
-    }
+    @ManyToOne
+    private Delivery delivery;
+
+    private String description;
+
+    @Column(name = "registration_date")
+    private OffsetDateTime registrationDate;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Client client = (Client) o;
-        return Objects.equals(id, client.id);
+        Occurrence that = (Occurrence) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override
