@@ -44,6 +44,10 @@ public class Delivery {
     public Delivery() {
     }
 
+    public void addOccurrence(Occurrence occurrence){
+        this.occurrences.add(occurrence);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

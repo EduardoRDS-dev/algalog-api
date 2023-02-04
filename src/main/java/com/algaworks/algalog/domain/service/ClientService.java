@@ -1,14 +1,13 @@
 package com.algaworks.algalog.domain.service;
 
 import com.algaworks.algalog.api.exceptions.BusinessException;
-import com.algaworks.algalog.api.exceptions.ClientNotFoudException;
+import com.algaworks.algalog.api.exceptions.EntityNotFoudException;
 import com.algaworks.algalog.domain.entity.Client;
 import com.algaworks.algalog.domain.repository.ClientRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,10 +24,6 @@ public class ClientService {
         return clientRepository.findByEmail(client.getEmail());
     }
 
-    public List<Client> findAll() {
-        return clientRepository.findAll();
-    }
-
     @Transactional
     public Client save(Client client) {
         findByEmail(client).ifPresent(clientExisting -> {
@@ -39,7 +34,7 @@ public class ClientService {
 
     @Transactional
     public Client update(Client client) {
-        Client clientFoundById = clientRepository.findById(client.getId()).orElseThrow(() -> new ClientNotFoudException("client not found!"));
+        Client clientFoundById = findById(client.getId()).orElseThrow(() -> new EntityNotFoudException("client not found!"));
 
         findByEmail(client).ifPresent(clientFoundByEmail -> {
             if (!clientFoundByEmail.equals(clientFoundById)) {

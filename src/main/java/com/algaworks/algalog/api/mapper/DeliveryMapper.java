@@ -2,6 +2,7 @@ package com.algaworks.algalog.api.mapper;
 
 import com.algaworks.algalog.api.model.ClientModel;
 import com.algaworks.algalog.api.model.DeliveryModel;
+import com.algaworks.algalog.api.model.RemitteeModel;
 import com.algaworks.algalog.api.model.input.DeliveryInput;
 import com.algaworks.algalog.api.model.input.RemitteeInput;
 import com.algaworks.algalog.domain.entity.Client;
@@ -10,6 +11,9 @@ import com.algaworks.algalog.domain.entity.Remittee;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
+
+import java.util.LinkedList;
+import java.util.List;
 
 @Component
 @AllArgsConstructor
@@ -33,9 +37,16 @@ public class DeliveryMapper {
         modelMapper.createTypeMap(Delivery.class, DeliveryModel.class)
                 .addMapping(Delivery::getId, DeliveryModel::setId)
                 .<Client>addMapping(Delivery::getClient, (deliveryModel, srcClient) -> deliveryModel.setClientModel(modelMapper.map(Client.class, ClientModel.class)))
-                .<Remittee>addMapping(Delivery::getRemittee, (deliveryModel, srcRemittee) -> deliveryModel.setRemitteeInput(modelMapper.map(Remittee.class, RemitteeInput.class)))
+                .<Remittee>addMapping(Delivery::getRemittee, (deliveryModel, srcRemittee) -> deliveryModel.setRemitteeInput(modelMapper.map(Remittee.class, RemitteeModel.class)))
                 .addMapping(Delivery::getId, DeliveryModel::setId);
 
         return modelMapper.map(delivery, DeliveryModel.class);
+    }
+
+    public List<DeliveryModel> toDeliveryModelList(List<Delivery> deliveries) {
+
+        LinkedList<DeliveryModel> result = new LinkedList<>();
+        deliveries.forEach(delivery -> result.add(toDeliveryModel(delivery)));
+        return result;
     }
 }

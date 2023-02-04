@@ -1,6 +1,6 @@
 package com.algaworks.algalog.domain.service;
 
-import com.algaworks.algalog.api.exceptions.ClientNotFoudException;
+import com.algaworks.algalog.api.exceptions.EntityNotFoudException;
 import com.algaworks.algalog.api.mapper.DeliveryMapper;
 import com.algaworks.algalog.api.model.input.DeliveryInput;
 import com.algaworks.algalog.domain.entity.Delivery;
@@ -24,8 +24,7 @@ public class ResquestDeliveryService {
     @Transactional
     public Delivery requestDelivery(DeliveryInput deliveryInput) {
 
-        clientService.findById(deliveryInput.getClientId())
-                .orElseThrow(() -> new ClientNotFoudException("client not found!"));
+        clientService.findById(deliveryInput.getClientId()).orElseThrow(() -> new EntityNotFoudException("client not found!"));
         Delivery newDelivery = deliveryMapper.toDelivery(deliveryInput);
         newDelivery.setStatus(DeliveryStatus.PENDING);
         newDelivery.setRequestDate(OffsetDateTime.now());

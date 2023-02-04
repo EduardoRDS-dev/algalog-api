@@ -26,6 +26,9 @@ public class Occurrence {
     @Column(name = "registration_date")
     private OffsetDateTime registrationDate;
 
+    public Occurrence() {
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -1,7 +1,7 @@
 package com.algaworks.algalog.api.exeception_handler;
 
 import com.algaworks.algalog.api.exceptions.BusinessException;
-import com.algaworks.algalog.api.exceptions.ClientNotFoudException;
+import com.algaworks.algalog.api.exceptions.EntityNotFoudException;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -52,8 +52,8 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler {
         return super.createResponseEntity(responseBody, HttpHeaders.EMPTY, HttpStatus.BAD_REQUEST, request);
     }
 
-    @ExceptionHandler(ClientNotFoudException.class)
-    public ResponseEntity<Object> handleClientNotFoundException(ClientNotFoudException ex, WebRequest request) {
+    @ExceptionHandler(EntityNotFoudException.class)
+    public ResponseEntity<Object> handleClientNotFoundException(EntityNotFoudException ex, WebRequest request) {
         BodyForExceptionResponse responseBody = new BodyForExceptionResponse(
                 OffsetDateTime.now(),
                 HttpStatus.NOT_FOUND.value(),

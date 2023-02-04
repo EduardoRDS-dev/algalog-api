@@ -4,6 +4,7 @@ import com.algaworks.algalog.api.mapper.ClientMapper;
 import com.algaworks.algalog.api.model.ClientModel;
 import com.algaworks.algalog.api.model.input.ClientInput;
 import com.algaworks.algalog.domain.entity.Client;
+import com.algaworks.algalog.domain.repository.ClientRepository;
 import com.algaworks.algalog.domain.service.ClientService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -19,12 +20,14 @@ import java.util.List;
 public class ClientController {
 
     private final ClientService clientService;
+    private final ClientRepository clientRepository;
     private final ClientMapper clientMapper;
 
     @GetMapping()
     public ResponseEntity<List<ClientModel>> findAll() {
-        List<Client> clientList = clientService.findAll();
-        return clientList.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(clientMapper.toClientModelList(clientList));
+
+        List<ClientModel> clientModelList = clientMapper.toClientModelList(clientRepository.findAll());
+        return clientModelList.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(clientModelList);
     }
 
     @GetMapping("/{clientId}")

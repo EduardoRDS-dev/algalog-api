@@ -1,6 +1,5 @@
 package com.algaworks.algalog.api.model;
 
-import com.algaworks.algalog.api.model.input.RemitteeInput;
 import com.algaworks.algalog.domain.entity.DeliveryStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
@@ -16,7 +15,7 @@ public class DeliveryModel {
 
     private Long id;
     private ClientModel clientModel;
-    private RemitteeInput remitteeInput;
+    private RemitteeModel remitteeInput;
     private DeliveryStatus status;
     private BigDecimal tax;
     private OffsetDateTime requestDate;
