@@ -30,7 +30,7 @@ public class Delivery {
     @Enumerated(value = EnumType.STRING)
     private DeliveryStatus status;
 
-    @OneToMany(mappedBy = "delivery")
+    @OneToMany(mappedBy = "delivery",fetch = FetchType.EAGER)
     private List<Occurrence> occurrences = new ArrayList<>();
 
     private BigDecimal tax;
@@ -42,10 +42,6 @@ public class Delivery {
     private OffsetDateTime deliveryDate;
 
     public Delivery() {
-    }
-
-    public void addOccurrence(Occurrence occurrence){
-        this.occurrences.add(occurrence);
     }
 
     @Override

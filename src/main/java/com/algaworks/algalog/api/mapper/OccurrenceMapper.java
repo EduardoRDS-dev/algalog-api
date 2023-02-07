@@ -2,12 +2,15 @@ package com.algaworks.algalog.api.mapper;
 
 import com.algaworks.algalog.api.model.OccurrenceModel;
 import com.algaworks.algalog.domain.entity.Occurrence;
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+@Component
+@AllArgsConstructor
 public class OccurrenceMapper {
 
     private ModelMapper modelMapper;

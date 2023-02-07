@@ -37,7 +37,7 @@ public class DeliveryMapper {
         modelMapper.createTypeMap(Delivery.class, DeliveryModel.class)
                 .addMapping(Delivery::getId, DeliveryModel::setId)
                 .<Client>addMapping(Delivery::getClient, (deliveryModel, srcClient) -> deliveryModel.setClientModel(modelMapper.map(Client.class, ClientModel.class)))
-                .<Remittee>addMapping(Delivery::getRemittee, (deliveryModel, srcRemittee) -> deliveryModel.setRemitteeInput(modelMapper.map(Remittee.class, RemitteeModel.class)))
+                .<Remittee>addMapping(Delivery::getRemittee, (deliveryModel, srcRemittee) -> deliveryModel.setRemitteeModel(modelMapper.map(Remittee.class, RemitteeModel.class)))
                 .addMapping(Delivery::getId, DeliveryModel::setId);
 
         return modelMapper.map(delivery, DeliveryModel.class);

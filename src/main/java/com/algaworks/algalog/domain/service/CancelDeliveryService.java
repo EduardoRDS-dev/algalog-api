@@ -26,7 +26,7 @@ public class CancelDeliveryService {
         Delivery finishedDelivery = deliveryStream
                 .filter(delivery -> delivery.getStatus().equals(DeliveryStatus.PENDING))
                 .peek(delivery -> delivery.setStatus(DeliveryStatus.CANCELED))
-                .reduce((delivery, x) -> delivery).orElseThrow(() -> new BusinessException("delivery cannot be finalized!"));
+                .reduce((delivery, x) -> delivery).orElseThrow(() -> new BusinessException("delivery cannot be canceled!"));
 
         deliveryRepository.save(finishedDelivery);
     }

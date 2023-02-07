@@ -1,7 +1,9 @@
 package com.algaworks.algalog.domain.service;
 
+import com.algaworks.algalog.api.exceptions.BusinessException;
 import com.algaworks.algalog.api.exceptions.EntityNotFoudException;
 import com.algaworks.algalog.domain.entity.Delivery;
+import com.algaworks.algalog.domain.entity.DeliveryStatus;
 import com.algaworks.algalog.domain.entity.Occurrence;
 import com.algaworks.algalog.domain.repository.DeliveryRepository;
 import com.algaworks.algalog.domain.repository.OccurrenceRepository;
@@ -19,14 +21,17 @@ public class AddOccurrenceService {
     private final DeliveryRepository deliveryRepository;
 
     @Transactional
-    public Occurrence addOccurrence(String description, Long deliveryId) {
+    public void addOccurrence(String description, Long deliveryId) {
 
         Delivery delivery = deliveryRepository.findById(deliveryId).orElseThrow(() -> new EntityNotFoudException("delivery not found!"));
-        Occurrence occurrence = new Occurrence();
 
+        if (!delivery.getStatus().equals(DeliveryStatus.PENDING)) {
+            throw new BusinessException("delivery is " + delivery.getStatus().getValue() + "!");
+        }
+        Occurrence occurrence = new Occurrence();
         occurrence.setDelivery(delivery);
         occurrence.setDescription(description);
         occurrence.setRegistrationDate(OffsetDateTime.now());
-        return occurrenceRepository.save(occurrence);
+        occurrenceRepository.save(occurrence);
     }
 }

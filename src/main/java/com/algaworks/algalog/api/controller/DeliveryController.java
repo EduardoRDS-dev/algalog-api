@@ -1,6 +1,5 @@
 package com.algaworks.algalog.api.controller;
 
-import com.algaworks.algalog.api.exceptions.EntityNotFoudException;
 import com.algaworks.algalog.api.mapper.DeliveryMapper;
 import com.algaworks.algalog.api.model.DeliveryModel;
 import com.algaworks.algalog.api.model.input.DeliveryInput;
@@ -57,8 +56,8 @@ public class DeliveryController {
     @GetMapping("/{deliveryId}")
     public ResponseEntity<DeliveryModel> findById(@PathVariable Long deliveryId) {
 
-        DeliveryModel model = deliveryMapper.toDeliveryModel(
-                deliveryRepository.findById(deliveryId).orElseThrow(() -> new EntityNotFoudException("delivery not found!")));
-        return ResponseEntity.ok(model);
+        return deliveryRepository.findById(deliveryId)
+                .map(delivery -> ResponseEntity.ok(deliveryMapper.toDeliveryModel(delivery)))
+                .orElse(ResponseEntity.notFound().build());
     }
 }

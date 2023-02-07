@@ -15,7 +15,7 @@ public class DeliveryModel {
 
     private Long id;
     private ClientModel clientModel;
-    private RemitteeModel remitteeInput;
+    private RemitteeModel remitteeModel;
     private DeliveryStatus status;
     private BigDecimal tax;
     private OffsetDateTime requestDate;
